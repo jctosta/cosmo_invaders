@@ -67,7 +67,10 @@ fn player(
         // Apply movement deltas
         player.delta_x = player.delta_x.clamp(-MAX_VELOCITY, MAX_VELOCITY);
         trans.translation.x += player.delta_x;
-        trans.translation.x = trans.translation.x.clamp(-(WINDOW_WIDTH / 2.5), WINDOW_WIDTH / 2.5);
+        trans.translation.x = trans
+            .translation
+            .x
+            .clamp(-(WINDOW_WIDTH / 2.5), WINDOW_WIDTH / 2.5);
 
         // Decelerate
         player.delta_x *= 0.75;
