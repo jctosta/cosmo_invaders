@@ -142,14 +142,16 @@ mod menu {
         Play,
         Settings,
         BackToMainMenu,
-        BackToSettings,
         Quit,
     }
 
+    type InteractionQueryChanged = (Changed<Interaction>, With<Button>);
+
+    #[warn(clippy::type_complexity)]
     fn button_system(
         mut interaction_query: Query<
             (&Interaction, &mut BackgroundColor, Option<&SelectedOption>),
-            (Changed<Interaction>, With<Button>),
+            InteractionQueryChanged,
         >,
     ) {
         for (interaction, mut color, selected) in &mut interaction_query {
@@ -361,32 +363,28 @@ mod menu {
                         ..default()
                     })
                     .with_children(|parent| {
-                        for (action, text) in [(MenuButtonAction::BackToMainMenu, "Back")] {
-                            parent
-                                .spawn((
-                                    ButtonBundle {
-                                        style: button_style.clone(),
-                                        background_color: NORMAL_BUTTON.into(),
-                                        ..default()
-                                    },
-                                    action,
-                                ))
-                                .with_children(|parent| {
-                                    parent.spawn(TextBundle::from_section(
-                                        text,
-                                        button_text_style.clone(),
-                                    ));
-                                });
-                        }
+                        let (action, text) = (MenuButtonAction::BackToMainMenu, "Back");
+                        parent
+                            .spawn((
+                                ButtonBundle {
+                                    style: button_style.clone(),
+                                    background_color: NORMAL_BUTTON.into(),
+                                    ..default()
+                                },
+                                action,
+                            ))
+                            .with_children(|parent| {
+                                parent.spawn(TextBundle::from_section(
+                                    text,
+                                    button_text_style.clone(),
+                                ));
+                            });
                     });
             });
     }
 
     fn menu_action(
-        interaction_query: Query<
-            (&Interaction, &MenuButtonAction),
-            (Changed<Interaction>, With<Button>),
-        >,
+        interaction_query: Query<(&Interaction, &MenuButtonAction), InteractionQueryChanged>,
         mut app_exit_events: EventWriter<AppExit>,
         mut menu_state: ResMut<State<MenuState>>,
         mut game_state: ResMut<State<GameState>>,
@@ -401,9 +399,6 @@ mod menu {
                     }
                     MenuButtonAction::Settings => menu_state.set(MenuState::Settings).unwrap(),
                     MenuButtonAction::BackToMainMenu => menu_state.set(MenuState::Main).unwrap(),
-                    MenuButtonAction::BackToSettings => {
-                        menu_state.set(MenuState::Settings).unwrap();
-                    }
                 }
             }
         }

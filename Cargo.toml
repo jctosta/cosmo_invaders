@@ -6,7 +6,6 @@ authors = ["Carlos Tosta <jctosta86@gmail.com>"]
 readme = "README.md"
 repository = "https://github.com/jctosta/cosmo_invaders"
 license = "MIT"
-license-file = "LICENSE.md"
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
