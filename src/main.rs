@@ -86,14 +86,25 @@ mod menu {
 
     impl Plugin for MenuPlugin {
         fn build(&self, app: &mut App) {
-            app
-                .add_state(MenuState::Disabled)
+            app.add_state(MenuState::Disabled)
                 .add_system_set(SystemSet::on_enter(GameState::Menu).with_system(menu_setup))
                 .add_system_set(SystemSet::on_enter(MenuState::Main).with_system(main_menu_setup))
-                .add_system_set(SystemSet::on_exit(MenuState::Main).with_system(despawn_screen::<OnMainMenuScreen>))
-                .add_system_set(SystemSet::on_enter(MenuState::Settings).with_system(settings_menu_setup))
-                .add_system_set(SystemSet::on_exit(MenuState::Settings).with_system(despawn_screen::<OnSettingsMenuScreen>))
-                .add_system_set(SystemSet::on_update(GameState::Menu).with_system(menu_action).with_system(button_system));
+                .add_system_set(
+                    SystemSet::on_exit(MenuState::Main)
+                        .with_system(despawn_screen::<OnMainMenuScreen>),
+                )
+                .add_system_set(
+                    SystemSet::on_enter(MenuState::Settings).with_system(settings_menu_setup),
+                )
+                .add_system_set(
+                    SystemSet::on_exit(MenuState::Settings)
+                        .with_system(despawn_screen::<OnSettingsMenuScreen>),
+                )
+                .add_system_set(
+                    SystemSet::on_update(GameState::Menu)
+                        .with_system(menu_action)
+                        .with_system(button_system),
+                );
         }
     }
 
@@ -350,9 +361,7 @@ mod menu {
                         ..default()
                     })
                     .with_children(|parent| {
-                        for (action, text) in [
-                            (MenuButtonAction::BackToMainMenu, "Back"),
-                        ] {
+                        for (action, text) in [(MenuButtonAction::BackToMainMenu, "Back")] {
                             parent
                                 .spawn((
                                     ButtonBundle {
