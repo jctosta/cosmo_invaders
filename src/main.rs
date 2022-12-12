@@ -208,7 +208,7 @@ mod menu {
         };
         let button_text_style = TextStyle {
             font: font.clone(),
-            font_size: 40.0,
+            font_size: 30.0,
             color: TEXT_COLOR,
         };
 
@@ -502,7 +502,11 @@ mod game {
                             trans.translation.y + 24.0,
                             0.0,
                         )),
-                        sprite: TextureAtlasSprite::new(2),
+                        sprite: TextureAtlasSprite {
+                            index: 2,
+                            color: Color::LIME_GREEN,
+                            ..default()
+                        },
                         ..default()
                     },
                     Laser,
@@ -600,7 +604,11 @@ mod game {
             SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle.clone(),
                 transform: Transform::from_translation(Vec3::new(0.0, -(WINDOW_HEIGHT / 2.5), 0.0)),
-                sprite: TextureAtlasSprite::new(0),
+                sprite: TextureAtlasSprite {
+                    index: 0,
+                    color: Color::LIME_GREEN,
+                    ..default()
+                },
                 ..default()
             },
             Player { delta_x: 0.0 },
@@ -616,7 +624,11 @@ mod game {
                     SpriteSheetBundle {
                         texture_atlas: texture_atlas_handle.clone(),
                         transform: Transform::from_translation(Vec3::new(x, y, 0.0)),
-                        sprite: TextureAtlasSprite::new(1),
+                        sprite: TextureAtlasSprite {
+                            index: 1,
+                            color: Color::LIME_GREEN,
+                            ..default()
+                        },
                         ..default()
                     },
                     Bug {
